@@ -1,0 +1,37 @@
+#!/usr/bin/expect
+set ip [lindex $argv 0]
+set iface [lindex $argv 1]
+set status [lindex $argv 2]
+spawn telnet $ip
+set timeout 10 
+#expect {
+#"yes/no" {send "yes\r"; exp_continue }
+#"Password:" { send "stack\n" }
+#}
+#expect "stack"
+#send "sudo /usr/sbin/crm_mon -f -1\n"
+#expect "stack@"
+expect "sername:"
+send "networkauto\r"
+expect "assword:"
+send "1qaz2wsx\r"
+expect ">"
+send "enable\r"
+expect "assword:"
+send "1qaz2wsx\r"
+expect "#"
+send "configure terminal\r"
+expect "#"
+send "interface $iface\r"
+expect "#"
+if { $status == "down" } {
+send "shutdown\r"
+} else {
+send "no shutdown\r"
+}
+expect "#"
+send "end\r"
+expect "#"
+
+exit
+expect eof
